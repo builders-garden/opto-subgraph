@@ -1,0 +1,15 @@
+type Block @entity {
+  id: ID!
+  baseFee: BigInt!
+  timestamp: BigInt!
+  blockId: BigInt!
+  blobBaseFee: BigInt
+  feeAggregator: FeeAggregator @derivedFrom(field: "daily")
+}
+
+type FeeAggregator @entity {
+  id: ID!
+  daily: [Block!]!
+  gas_average_daily: BigInt
+  blob_average_daily: BigInt
+}

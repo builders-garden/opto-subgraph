@@ -1,0 +1,40 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Opto
+    network: fuji
+    source:
+      address: "0xA2416Abe3e1EF4519Ee9B527b3d859bAcc693dfc"
+      abi: Opto
+      startBlock: 32702531
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Option
+      abis:
+        - name: Opto
+          file: ./abis/Opto_ABI.json
+      eventHandlers:
+        - event: CustomOptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint256,uint256,string,string,string,string[])
+          handler: handleCustomOptionCreated
+        - event: OptionBought(indexed uint256,indexed address,uint256,uint256)
+          handler: handleOptionBought
+        - event: OptionClaimed(indexed uint256,indexed address,uint256,uint256)
+          handler: handleOptionClaimed
+        - event: OptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint8,uint256,uint256,uint256,uint256)
+          handler: handleOptionCreated
+        - event: Response(indexed uint256,indexed bool,indexed bytes32,bytes,bytes)
+          handler: handleResponse
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: erroredClaimed(indexed uint256,indexed address,uint256)
+          handler: handleErroredClaimed
+        - event: OptionDeleted(indexed uint256)
+          handler: handleOptionDeleted
+      file: ./src/OptoIndexer.ts

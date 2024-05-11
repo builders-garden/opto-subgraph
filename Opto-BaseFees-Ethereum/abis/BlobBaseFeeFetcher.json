@@ -1,0 +1,28 @@
+[
+	{
+		"inputs": [],
+		"name": "getBlobBaseFeeSolidity",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "blobBaseFee",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBlobBaseFeeYul",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "blobBaseFee",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

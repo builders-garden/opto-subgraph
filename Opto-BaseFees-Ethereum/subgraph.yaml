@@ -1,0 +1,27 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: EthGasFetcher
+    network: mainnet
+    source:
+      address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+      abi: USDC
+      startBlock: 19778778
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Block
+        - AverageBaseFee
+      abis:
+        - name: BlobBaseFeeFetcher
+          file: ./abis/BlobBaseFeeFetcher.json
+        - name: USDC
+          file: ./abis/USDC.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/gasindexer.ts
