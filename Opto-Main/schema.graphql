@@ -8,13 +8,15 @@ type Option @entity {
   units: BigInt!
   unitsLeft: BigInt
   capPerUnit: BigInt!
-  isClaimable: Boolean
-  hasResponse: Boolean
+  hasToPay: Boolean
   countervalue: BigInt!
   premiumCollected: BigInt
   responseValue: BigInt
   users: [User!]! @derivedFrom(field: "options")
   isDeleted: Boolean
+  isErrored: Boolean
+  name: String
+  desc: String
 }
 
 type User @entity {
@@ -28,4 +30,6 @@ type OptionUnitsMapping @entity {
   user: User! @relation(name: "UserOptionsMapping")
   option: Option! @relation(name: "OptionUserMapping")
   units: BigInt!
+  claimed: Boolean
+  errorClaim: Boolean
 }

@@ -12,14 +12,24 @@ import {
   OptionDeleted
 } from "../generated/Opto/Opto";
 
+const rpcCallNames = [
+  "None",
+  "Apple",
+  "Amazon",
+  "Coinbase",
+  "Alphabet",
+  "Microsoft",
+  "Nvidia",
+  "Tesla",
+  "Gold",
+  "Silver"
+];
+
 export function handleTransferBatch(event: TransferBatch): void {
- 
+    // non me va 
 }
 
 export function handleTransferSingle(event: TransferSingle): void {
-
-
-
   let oldUser = User.load(event.params.from.toHexString());
   if (oldUser) {
     let optionId = event.params.id.toString();
@@ -30,6 +40,12 @@ export function handleTransferSingle(event: TransferSingle): void {
         oldUser.save();
       }
     }
+    let oldUserMappingId = `${oldUser.id}-${event.params.id.toString()}`;
+    let oldUserMapping = OptionUnitsMapping.load(oldUserMappingId);
+    if (oldUserMapping){
+      oldUserMapping.units = oldUserMapping.units.minus(event.params.value)
+      oldUserMapping.save();
+    }
   }
   
   let newUser = User.load(event.params.to.toHexString());
@@ -38,14 +54,14 @@ export function handleTransferSingle(event: TransferSingle): void {
     newUser.options = [event.params.id.toString()]; 
 
     let mappingId = `${newUser.id}-${event.params.id.toString()}`;
-      let mapping = OptionUnitsMapping.load(mappingId);
-      if (!mapping) {
-        mapping = new OptionUnitsMapping(mappingId);
-      }
-      mapping.user = newUser.id;
-      mapping.option = event.params.id.toString();
-      mapping.units = event.params.value; // Assign units from the Option entity
-      mapping.save();
+    let mapping = OptionUnitsMapping.load(mappingId);
+    if (!mapping) {
+      mapping = new OptionUnitsMapping(mappingId);
+    }
+    mapping.user = newUser.id!; // Ensure newUser.id is not null
+    mapping.option = event.params.id.toString();
+    mapping.units = event.params.value; // Assign units from the Option entity
+    mapping.save();
 
     newUser.save();
 
@@ -62,7 +78,7 @@ export function handleTransferSingle(event: TransferSingle): void {
       if (!mapping) {
         mapping = new OptionUnitsMapping(mappingId);
       }
-      mapping.user = newUser.id;
+      mapping.user = newUser.id!; // Ensure newUser.id is not null
       mapping.option = option.id;
       mapping.units = option.units; // Assign units from the Option entity
       mapping.save();
@@ -83,27 +99,72 @@ export function handleOptionBought(event: OptionBought): void {
 }
 
 export function handleOptionClaimed(event: OptionClaimed): void {
-  // Add your logic here to handle the OptionClaimed event
+    let user = event.params.claimer.toHexString();
+    let option = event.params.optionId.toString();
+    
+    let mappingId = `${user}-${option}`;
+    let mapping = OptionUnitsMapping.load(mappingId);
+    if (mapping) {
+      mapping.claimed = true;
+      mapping.save();  
+    }
 }
 
 export function handleErroredClaimed(event: erroredClaimed): void {
-  // Add your logic here to handle the OptionClaimed event
+    let user = event.params.claimer.toHexString();
+    let option = event.params.optionId.toString();
+    
+    let mappingId = `${user}-${option}`;
+    let mapping = OptionUnitsMapping.load(mappingId);
+    if (mapping) {
+      mapping.errorClaim = true;
+      mapping.save();
+    }
+  
 }
-
 
 export function handleResponse(event: Response): void {
-
+  let option = Option.load(event.params.optionId.toString());
+  if (option) {
+    if (event.params.response && event.params.response.toString().length > 0){
+      option.responseValue = BigInt.fromByteArray(event.params.response);
+      option.hasToPay = event.params.hasToPay;
+    } 
+    if (!option.responseValue){
+      option.isErrored = true;
+    }
+    option.save();
+  }
 }
+
+
 export function handleOptionDeleted(event: OptionDeleted): void {
   let option = Option.load(event.params.optionId.toString());
   if (option){
     option.isDeleted = true;
+    option.save();
   }
 }
 
 
 export function handleCustomOptionCreated(event: CustomOptionCreated): void {
-
+  let option = Option.load(event.params.optionId.toString());
+  if (!option){
+    option = new Option(event.params.optionId.toString());
+    option.writer = event.params.writer.toHexString();
+    option.isCall = event.params.isCall;
+    option.premium = event.params.premium;
+    option.strikePrice = event.params.strikePrice;
+    option.expirationDate = event.params.expirationDate;
+    option.units = event.params.units;
+    option.unitsLeft = event.params.units;
+    option.capPerUnit = event.params.capPerUnit;
+    option.countervalue = (event.params.capPerUnit).times(event.params.units);
+    option.premiumCollected = BigInt.fromI32(0);
+    option.name = event.params.name;
+    option.desc = event.params.desc;
+    option.save();
+  }
 }
 
 
@@ -121,8 +182,26 @@ export function handleOptionCreated(event: OptionCreated): void {
     option.capPerUnit = event.params.capPerUnit;
     option.countervalue = (event.params.capPerUnit).times(event.params.units);
     option.premiumCollected = BigInt.fromI32(0);
-    
+    if (event.params.optionType == 0){
+      option.name = rpcCallNames[event.params.assetId.toI32()]
+    }
+    if (event.params.optionType == 1){
+      if (event.params.optionQueryId.gt(BigInt.fromI32(2))){
+        option.name = "Ethereum Blob Gas"
+      } else {
+        if (event.params.optionQueryId.equals(BigInt.fromI32(2))){
+          option.name = "AVAX gas price";
+        }
+        if (event.params.optionQueryId.equals(BigInt.fromI32(3))){
+          option.name = "BSC gas price";
+        }
+        if (event.params.optionQueryId.equals(BigInt.fromI32(1))){
+          option.name = "ETH gas price";
+        }
+      }
+      
+    }
+   
     option.save();
   }
 }
-

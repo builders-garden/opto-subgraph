@@ -158,8 +158,8 @@ export class Option extends Entity {
     this.set("capPerUnit", Value.fromBigInt(value));
   }
 
-  get isClaimable(): boolean {
-    let value = this.get("isClaimable");
+  get hasToPay(): boolean {
+    let value = this.get("hasToPay");
     if (!value || value.kind == ValueKind.NULL) {
       return false;
     } else {
@@ -167,21 +167,8 @@ export class Option extends Entity {
     }
   }
 
-  set isClaimable(value: boolean) {
-    this.set("isClaimable", Value.fromBoolean(value));
-  }
-
-  get hasResponse(): boolean {
-    let value = this.get("hasResponse");
-    if (!value || value.kind == ValueKind.NULL) {
-      return false;
-    } else {
-      return value.toBoolean();
-    }
-  }
-
-  set hasResponse(value: boolean) {
-    this.set("hasResponse", Value.fromBoolean(value));
+  set hasToPay(value: boolean) {
+    this.set("hasToPay", Value.fromBoolean(value));
   }
 
   get countervalue(): BigInt {
@@ -246,6 +233,53 @@ export class Option extends Entity {
 
   set isDeleted(value: boolean) {
     this.set("isDeleted", Value.fromBoolean(value));
+  }
+
+  get isErrored(): boolean {
+    let value = this.get("isErrored");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isErrored(value: boolean) {
+    this.set("isErrored", Value.fromBoolean(value));
+  }
+
+  get name(): string | null {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string | null) {
+    if (!value) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(<string>value));
+    }
+  }
+
+  get desc(): string | null {
+    let value = this.get("desc");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set desc(value: string | null) {
+    if (!value) {
+      this.unset("desc");
+    } else {
+      this.set("desc", Value.fromString(<string>value));
+    }
   }
 }
 
@@ -394,6 +428,32 @@ export class OptionUnitsMapping extends Entity {
 
   set units(value: BigInt) {
     this.set("units", Value.fromBigInt(value));
+  }
+
+  get claimed(): boolean {
+    let value = this.get("claimed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set claimed(value: boolean) {
+    this.set("claimed", Value.fromBoolean(value));
+  }
+
+  get errorClaim(): boolean {
+    let value = this.get("errorClaim");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set errorClaim(value: boolean) {
+    this.set("errorClaim", Value.fromBoolean(value));
   }
 }
 

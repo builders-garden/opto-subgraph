@@ -4,17 +4,19 @@ schema:
 dataSources:
   - kind: ethereum
     name: Opto
-    network: fuji
+    network: sepolia
     source:
-      address: "0xA2416Abe3e1EF4519Ee9B527b3d859bAcc693dfc"
+      address: "0x2776a4AA5986E10858a532d4f6AeAFD8381615B1"
       abi: Opto
-      startBlock: 32702531
+      startBlock: 5810000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Option
+        - User
+        - OptionUnitsMapping
       abis:
         - name: Opto
           file: ./abis/Opto_ABI.json
