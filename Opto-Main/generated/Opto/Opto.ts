@@ -73,28 +73,32 @@ export class CustomOptionCreated__Params {
     return this._event.parameters[5].value.toBigInt();
   }
 
-  get units(): BigInt {
+  get buyDeadline(): BigInt {
     return this._event.parameters[6].value.toBigInt();
   }
 
-  get capPerUnit(): BigInt {
+  get units(): BigInt {
     return this._event.parameters[7].value.toBigInt();
   }
 
-  get name(): string {
-    return this._event.parameters[8].value.toString();
+  get capPerUnit(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
   }
 
-  get desc(): string {
+  get name(): string {
     return this._event.parameters[9].value.toString();
   }
 
-  get source(): string {
+  get desc(): string {
     return this._event.parameters[10].value.toString();
   }
 
+  get source(): string {
+    return this._event.parameters[11].value.toString();
+  }
+
   get args(): Array<string> {
-    return this._event.parameters[11].value.toStringArray();
+    return this._event.parameters[12].value.toStringArray();
   }
 }
 
@@ -195,24 +199,28 @@ export class OptionCreated__Params {
     return this._event.parameters[5].value.toBigInt();
   }
 
+  get buyDeadline(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
   get optionType(): i32 {
-    return this._event.parameters[6].value.toI32();
+    return this._event.parameters[7].value.toI32();
   }
 
   get assetId(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
-  }
-
-  get optionQueryId(): BigInt {
     return this._event.parameters[8].value.toBigInt();
   }
 
-  get units(): BigInt {
+  get optionQueryId(): BigInt {
     return this._event.parameters[9].value.toBigInt();
   }
 
-  get capPerUnit(): BigInt {
+  get units(): BigInt {
     return this._event.parameters[10].value.toBigInt();
+  }
+
+  get capPerUnit(): BigInt {
+    return this._event.parameters[11].value.toBigInt();
   }
 }
 
@@ -259,8 +267,8 @@ export class Response__Params {
     return this._event.parameters[2].value.toBytes();
   }
 
-  get response(): Bytes {
-    return this._event.parameters[3].value.toBytes();
+  get result(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 
   get err(): Bytes {

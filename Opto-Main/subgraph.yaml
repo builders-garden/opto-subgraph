@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Opto
-    network: sepolia
+    network: polygon-amoy
     source:
-      address: "0x2776a4AA5986E10858a532d4f6AeAFD8381615B1"
+      address: "0xa24D94e805ad0ba430cC9396D112e4283C2E9532"
       abi: Opto
-      startBlock: 5810000
+      startBlock: 7234955
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -21,15 +21,15 @@ dataSources:
         - name: Opto
           file: ./abis/Opto_ABI.json
       eventHandlers:
-        - event: CustomOptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint256,uint256,string,string,string,string[])
+        - event: CustomOptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint256,uint256,uint256,string,string)
           handler: handleCustomOptionCreated
         - event: OptionBought(indexed uint256,indexed address,uint256,uint256)
           handler: handleOptionBought
         - event: OptionClaimed(indexed uint256,indexed address,uint256,uint256)
           handler: handleOptionClaimed
-        - event: OptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint8,uint256,uint256,uint256,uint256)
+        - event: OptionCreated(indexed uint256,indexed address,bool,uint256,uint256,uint256,uint256,uint8,uint256,uint256,uint256,uint256)
           handler: handleOptionCreated
-        - event: Response(indexed uint256,indexed bool,indexed bytes32,bytes,bytes)
+        - event: Response(indexed uint256,indexed bool,indexed bytes32,uint256,bytes)
           handler: handleResponse
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch

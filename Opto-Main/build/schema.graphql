@@ -5,6 +5,7 @@ type Option @entity {
   premium: BigInt!
   strikePrice: BigInt!
   expirationDate: BigInt!
+  deadlineDate: BigInt!
   units: BigInt!
   unitsLeft: BigInt
   capPerUnit: BigInt!
@@ -17,6 +18,7 @@ type Option @entity {
   isErrored: Boolean
   name: String
   desc: String
+  isCustom: Boolean!
 }
 
 type User @entity {

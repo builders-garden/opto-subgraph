@@ -115,6 +115,19 @@ export class Option extends Entity {
     this.set("expirationDate", Value.fromBigInt(value));
   }
 
+  get deadlineDate(): BigInt {
+    let value = this.get("deadlineDate");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set deadlineDate(value: BigInt) {
+    this.set("deadlineDate", Value.fromBigInt(value));
+  }
+
   get units(): BigInt {
     let value = this.get("units");
     if (!value || value.kind == ValueKind.NULL) {
@@ -280,6 +293,19 @@ export class Option extends Entity {
     } else {
       this.set("desc", Value.fromString(<string>value));
     }
+  }
+
+  get isCustom(): boolean {
+    let value = this.get("isCustom");
+    if (!value || value.kind == ValueKind.NULL) {
+      return false;
+    } else {
+      return value.toBoolean();
+    }
+  }
+
+  set isCustom(value: boolean) {
+    this.set("isCustom", Value.fromBoolean(value));
   }
 }
 

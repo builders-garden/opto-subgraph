@@ -1,3 +1,9 @@
 /Opto-BaseFees-Ethereum/node_modules
 /Opto-Main/node_modules
 /Opto-BaseFees-Avax/node_modules
+/Opto-BaseFees-Ethereum/generated
+/Opto-Main/generated
+/Opto-BaseFees-Avax/generated
+/Opto-BaseFees-Ethereum/build
+/Opto-Main/build
+/Opto-BaseFees-Avax/build

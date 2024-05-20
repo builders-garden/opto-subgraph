@@ -126,8 +126,8 @@ export function handleErroredClaimed(event: erroredClaimed): void {
 export function handleResponse(event: Response): void {
   let option = Option.load(event.params.optionId.toString());
   if (option) {
-    if (event.params.response && event.params.response.toString().length > 0){
-      option.responseValue = BigInt.fromByteArray(event.params.response);
+    if (event.params.result){
+      option.responseValue = event.params.result;
       option.hasToPay = event.params.hasToPay;
     } 
     if (!option.responseValue){
@@ -160,7 +160,9 @@ export function handleCustomOptionCreated(event: CustomOptionCreated): void {
     option.unitsLeft = event.params.units;
     option.capPerUnit = event.params.capPerUnit;
     option.countervalue = (event.params.capPerUnit).times(event.params.units);
+    option.deadlineDate = event.params.buyDeadline;
     option.premiumCollected = BigInt.fromI32(0);
+    option.isCustom = true;
     option.name = event.params.name;
     option.desc = event.params.desc;
     option.save();
@@ -178,25 +180,28 @@ export function handleOptionCreated(event: OptionCreated): void {
     option.strikePrice = event.params.strikePrice;
     option.expirationDate = event.params.expirationDate;
     option.units = event.params.units;
+    option.name = "-";
     option.unitsLeft = event.params.units;
     option.capPerUnit = event.params.capPerUnit;
     option.countervalue = (event.params.capPerUnit).times(event.params.units);
+    option.deadlineDate = event.params.buyDeadline;
+    option.isCustom = false;
     option.premiumCollected = BigInt.fromI32(0);
     if (event.params.optionType == 0){
-      option.name = rpcCallNames[event.params.assetId.toI32()]
+      option.name = rpcCallNames[event.params.optionQueryId.toI32()]
     }
     if (event.params.optionType == 1){
-      if (event.params.optionQueryId.gt(BigInt.fromI32(2))){
-        option.name = "Ethereum Blob Gas"
+      if (event.params.assetId.gt(BigInt.fromI32(2))){
+        option.name = "blobeth"
       } else {
-        if (event.params.optionQueryId.equals(BigInt.fromI32(2))){
-          option.name = "AVAX gas price";
+        if (event.params.assetId.equals(BigInt.fromI32(2))){
+          option.name = "gasavax";
         }
-        if (event.params.optionQueryId.equals(BigInt.fromI32(3))){
-          option.name = "BSC gas price";
+        if (event.params.assetId.equals(BigInt.fromI32(3))){
+          option.name = "gasbnb";
         }
-        if (event.params.optionQueryId.equals(BigInt.fromI32(1))){
-          option.name = "ETH gas price";
+        if (event.params.assetId.equals(BigInt.fromI32(1))){
+          option.name = "gaseth";
         }
       }
       
